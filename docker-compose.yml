@@ -1,0 +1,54 @@
+version: "3.8"
+#services:
+#  kms:
+#    image: kurento/kurento-media-server:7.2.0
+#    container_name: kms
+#    ports:
+#      - "8888:8888/tcp"
+#      - "50000-50500:50000-50500/udp"
+#    environment:
+#      - KMS_MIN_PORT=50000
+#      - KMS_MAX_PORT=50500
+#      - KMS_STUN_SERVER=stun.l.google.com
+#      - KMS_STUN_PORT=19302
+#      # 퍼블릭 IP나 고정 NAT일 경우 다음 설정을 추가 (없으면 생략)
+#      # - KMS_EXTERNAL_IPV4=공인IP
+#    restart: unless-stopped
+
+services:
+  turn:
+    image: instrumentisto/coturn
+    container_name: turn
+    command: >
+      -n --log-file=stdout
+      --lt-cred-mech
+      --realm=${REALM}
+      --user=${TURN_USER}:${TURN_PASS}
+      --listening-port=3478
+      --listening-ip=0.0.0.0
+      --min-port=49160
+      --max-port=49200
+      --no-tls
+    ports:
+      - "3478:3478/tcp"
+      - "3478:3478/udp"
+      - "49160-49200:49160-49200/udp"
+    restart: unless-stopped
+
+  kms:
+    image: kurento/kurento-media-server:7.2.0
+    container_name: kms
+    environment:
+      - KMS_MIN_PORT=50000
+      - KMS_MAX_PORT=50500
+      - KMS_EXTERNAL_IPV4=${PUBLIC_IP}
+      - KMS_STUN_SERVER=stun.l.google.com
+      - KMS_STUN_PORT=19302
+      # 브라우저 <-> TURN <-> KMS 경로용
+      - KMS_TURN_URL=${TURN_USER}:${TURN_PASS}@turn:3478?transport=udp
+    depends_on:
+      - turn
+    ports:
+      - "8888:8888/tcp"            # KMS 제어용 WebSocket
+      - "50000-50500:50000-50500/udp"  # WebRTC 미디어 포트
+    restart: unless-stopped

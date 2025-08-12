@@ -1,0 +1,5 @@
+
+//아래 명령어로 서명키를 만들고 생성된 키를 src/resources/ 경로에 넣어야 함
+
+
+keytool -genkeypair -alias my-local-ssl -keyalg RSA  -keysize 2048  -storetype PKCS12  -keystore keystore.p12  -validity 3650 -storepass password

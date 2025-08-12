@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>RealTalk SFU 화상채팅</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#F8F9FA;min-height:100vh;color:#333}.container{max-width:1200px;margin:0 auto;padding:20px}.container.chat-active{height:calc(100vh - 80px);display:flex;flex-direction:column}.hidden{display:none!important}.btn{padding:12px 24px;border:none;border-radius:6px;font-size:16px;font-weight:500;cursor:pointer;transition:all .2s ease;border:2px solid transparent}.btn-primary{background:#2C3E50;color:white}.btn-primary:hover{background:#1a252f;transform:translateY(-1px)}.btn-danger{background:#dc3545;color:white}.btn-danger:hover{background:#c82333}.btn-secondary{background:white;color:#666;border:2px solid #E5E5E5}.btn-secondary:hover{background:#f8f9fa;border-color:#ccc}.header{background:white;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #E5E5E5;box-shadow:0 2px 4px rgba(0,0,0,.05)}.logo{font-size:24px;font-weight:bold;color:#333}.room-info{text-align:center;flex:1}.room-title{font-size:18px;color:#333;font-weight:600}.room-status{margin-top:5px;font-size:14px;color:#666}.participant-count{background:#00C851;color:white;padding:4px 8px;border-radius:4px;font-size:12px;margin-left:10px;font-weight:500}.room-entry{background:white;border-radius:12px;padding:60px 40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #E5E5E5;max-width:500px;margin:80px auto}.entry-title{font-size:32px;color:#333;margin-bottom:12px;font-weight:bold}.entry-subtitle{font-size:16px;color:#666;margin-bottom:40px;line-height:1.5}.room-input-group{margin-bottom:40px}.room-input{width:100%;max-width:300px;padding:16px 20px;font-size:16px;border:2px solid #E5E5E5;border-radius:8px;text-align:center;margin-bottom:16px;background:#F8F9FA;color:#333}.room-input:focus{outline:none;border-color:#2C3E50;background:white}.username-input{width:100%;max-width:200px;padding:12px 16px;font-size:14px;border:2px solid #E5E5E5;border-radius:6px;text-align:center;background:#F8F9FA;color:#333}.username-input:focus{outline:none;border-color:#2C3E50;background:white}.preview-section{background:white;border-radius:12px;padding:40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #E5E5E5;max-width:600px;margin:40px auto}.preview-section h2{font-size:24px;color:#333;margin-bottom:8px;font-weight:600}.preview-section p{font-size:16px;color:#666;margin-bottom:30px}.preview-video-container{width:100%;max-width:400px;height:300px;margin:0 auto 30px;position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.15);background:#000;border:2px solid #E5E5E5}.preview-video{width:100%;height:100%;object-fit:cover}.camera-error{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:white;text-align:center;background:rgba(0,0,0,.8);padding:20px;border-radius:10px}.controls{display:flex;justify-content:center;gap:20px;margin:30px 0}.control-btn{width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;transition:all .2s ease;font-weight:500;position:relative}.control-btn:hover{transform:scale(1.05)}.video-toggle{background:#2C3E50;color:white}.video-toggle.off{background:#e74c3c}.audio-toggle{background:#2C3E50;color:white}.audio-toggle.off{background:#e74c3c}.control-btn::before{content:'';position:absolute;width:20px;height:20px;background-size:contain;background-repeat:no-repeat;background-position:center}.video-toggle::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z'/%3E%3C/svg%3E")}.video-toggle.off::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M21 6.5l-4 4V7c0-.55-.45-1-1-1H9.82l8.18 8.18V6.5zM3.27 2L2 3.27 4.73 6H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.21 0 .39-.08.54-.18L19.73 21 21 19.73 3.27 2z'/%3E%3C/svg%3E")}.audio-toggle::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z'/%3E%3Cpath d='M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z'/%3E%3C/svg%3E")}.audio-toggle.off::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M19 11h-2c0 .91-.23 1.76-.61 2.5l1.44 1.44c.71-1.21 1.17-2.6 1.17-3.94z'/%3E%3Cpath d='M15.54 17c-.15-.17-.24-.39-.24-.63v-1.37c.3-.06.6-.14.88-.24l1.44 1.44c-.42.24-.87.44-1.35.6-.24.06-.48.12-.73.2z'/%3E%3Cpath d='M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z'/%3E%3Cpath d='M2.27 1.72L1 3l3 3v5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c1.13-.16 2.17-.57 3.05-1.18l2.22 2.22 1.27-1.27L2.27 1.72z'/%3E%3C/svg%3E")}.chat-section{display:none;flex-direction:column;flex:1;overflow:hidden}.connection-status{background:white;border-radius:8px;padding:16px;margin-bottom:20px;text-align:center;border:1px solid #E5E5E5;font-weight:500;flex-shrink:0}.status-connecting{color:#ff9800}.status-connected{color:#00C851}.status-failed{color:#dc3545}.video-grid{display:grid;gap:16px;margin-bottom:24px;flex:1;overflow:hidden;align-items:start}.video-grid.participants-1{grid-template-columns:1fr}.video-grid.participants-2{grid-template-columns:1fr 1fr}.video-grid.participants-3{grid-template-columns:repeat(3,1fr)}.video-grid.participants-4{grid-template-columns:1fr 1fr}.video-grid.participants-5,.video-grid.participants-6{grid-template-columns:repeat(3,1fr)}.video-container{position:relative;background:#000;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.1);width:100%;height:0;padding-bottom:100%;border:2px solid #E5E5E5}.video-element{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}.video-label{position:absolute;bottom:12px;left:12px;background:rgba(44,62,80,.9);color:white;padding:6px 12px;border-radius:6px;font-size:14px;font-weight:500}.no-video{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#34495e,#2c3e50);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.no-video-icon{width:64px;height:64px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.2)}.no-video-icon::before{content:'';width:24px;height:24px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M9 2c-1.05 0-2.05.16-3 .46v4.13c.96-.33 1.96-.54 3-.54 5.52 0 10 4.48 10 10 0 1.04-.21 2.04-.54 3h4.13c.3-.95.46-1.95.46-3 0-8.84-7.16-16-16-16z'/%3E%3Cpath d='M4.27 3L3 4.27l2.01 2.01C4.69 6.69 4.34 7.32 4 8v8c0 .55.45 1 1 1h1l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z'/%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;background-position:center}.no-video-text{font-size:14px;font-weight:500;opacity:.9}.chat-controls{background:white;border-radius:12px;padding:20px;display:flex;justify-content:center;align-items:center;gap:20px;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #E5E5E5;flex-shrink:0}@media (max-width:768px){.container{padding:8px}.container.chat-active{height:calc(100vh - 60px)}.video-grid{gap:8px;margin-bottom:16px}.video-grid.participants-1{grid-template-columns:1fr}.video-grid.participants-2{grid-template-columns:1fr 1fr}.video-grid.participants-3{grid-template-columns:1fr 1fr}.video-grid.participants-4{grid-template-columns:1fr 1fr}.video-grid.participants-5{grid-template-columns:1fr 1fr}.video-grid.participants-6{grid-template-columns:1fr 1fr}.preview-video-container{width:100%;max-width:350px}.room-input{width:100%;max-width:280px}.room-entry{margin:40px auto;padding:40px 30px}.preview-section{margin:20px auto;padding:30px 20px}.header{padding:12px 20px}.logo{font-size:20px}.room-title{font-size:16px}.chat-controls{padding:12px;gap:16px}}
+    </style>
+</head>
+<body>
+<!-- 헤더 -->
+<div class="header hidden" id="header">
+    <div class="logo">RealTalk SFU</div>
+    <div class="room-info">
+        <div class="room-title">방: <span id="roomDisplay">-</span></div>
+        <div class="room-status">
+            <span id="userDisplay">-</span>
+            <span class="participant-count" id="participantCount">1명</span>
+        </div>
+    </div>
+    <button class="btn btn-danger" onclick="exitRoom()">나가기</button>
+</div>
+
+<div class="container">
+    <!-- 방 입장 화면 -->
+    <div class="room-entry" id="roomEntry">
+        <h1 class="entry-title">RealTalk SFU</h1>
+        <p class="entry-subtitle">방 번호를 입력하여 SFU 화상채팅에 참여하세요</p>
+
+        <div class="room-input-group">
+            <input type="text" class="room-input" id="roomInput" placeholder="방 번호 입력 (예: 1234)" maxlength="10"/>
+            <br/>
+            <input type="text" class="username-input" id="usernameInput" placeholder="이름 입력" maxlength="20"/>
+        </div>
+
+        <button class="btn btn-primary" onclick="enterRoom()" id="enterBtn">입장하기</button>
+    </div>
+
+    <!-- 미리보기 화면 -->
+    <div class="preview-section hidden" id="previewSection">
+        <h2>카메라 및 마이크 확인</h2>
+        <p>설정을 확인한 후 SFU 채팅에 참여하세요</p>
+
+        <div class="preview-video-container">
+            <video id="previewVideo" class="preview-video" autoplay muted playsinline></video>
+            <div class="camera-error hidden" id="cameraError">
+                <div>카메라</div>
+                <div>카메라에 접근할 수 없습니다</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn video-toggle" id="videoToggle" onclick="toggleVideo()"></button>
+            <button class="control-btn audio-toggle" id="audioToggle" onclick="toggleAudio()"></button>
+        </div>
+
+        <button class="btn btn-primary" onclick="joinRoom()" id="joinBtn">채팅 시작</button>
+        <button class="btn btn-secondary" onclick="goBack()" style="margin-left: 10px;">뒤로가기</button>
+    </div>
+
+    <!-- 채팅 화면 -->
+    <div class="chat-section" id="chatSection">
+        <div class="connection-status" id="connectionStatus">
+            <span class="status-connecting">SFU 서버에 연결 중...</span>
+        </div>
+
+        <div class="video-grid participants-1" id="videoGrid">
+            <!-- 동적으로 비디오 추가 -->
+        </div>
+
+        <div class="chat-controls">
+            <button class="control-btn video-toggle" id="chatVideoToggle" onclick="toggleChatVideo()"></button>
+            <button class="control-btn audio-toggle" id="chatAudioToggle" onclick="toggleChatAudio()"></button>
+            <button class="btn btn-danger" onclick="exitRoom()">나가기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /***********************
+     * 환경 상수 (필수 수정)
+     ***********************/
+    const WS_HOST = '192.168.219.111'; // ← SFU 백엔드 호스트/IP
+    const WS_PORT = 8082;              // ← SFU 백엔드 WebSocket 포트
+    const WS_PATH = '/sfu';
+
+    // TURN 쓰면 아래 주석 해제하고 정보 입력 (브라우저 ICE)
+    const ICE_SERVERS = [
+      //  { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'turn:192.168.219.111:3478', username: 'turnuser', credential: 'turnpass' },
+        // { urls: 'turn:YOUR_TURN_HOST:3478', username: 'turnuser', credential: 'turnpass' }
+    ];
+
+    // 전역 상태
+    let localStream = null;
+    let webRtcPeer = null; // 퍼블리시(송신) 피어
+    let participants = {}; // { [userId]: { video, webRtcPeer, pendingCandidates, sdpNegotiationCompleted } }
+    let socket = null;
+    let roomId = null;
+    let username = null;
+    let userId = null;
+    let isVideoEnabled = true;
+    let isAudioEnabled = true;
+
+    /***********************
+     * 간이 kurentoUtils 대체
+     ***********************/
+    function initializeWebRTC() {
+        window.kurentoUtils = {
+            WebRtcPeer: {
+                WebRtcPeerSendonly: function (options, callback) {
+                    const self = this;
+                    // const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+                    const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS, iceTransportPolicy: 'relay' });
+
+                    // 🔹 로컬 트랙을 반드시 PC에 올린다
+                    const vs = options.videoStream || options.stream;
+                    const as = options.audioStream || options.stream;
+                    if (vs) vs.getTracks().forEach(t => pc.addTrack(t, vs));
+                    if (as && as !== vs) as.getTracks().forEach(t => pc.addTrack(t, as));
+
+                    pc.onicecandidate = (event) => {
+                        if (event.candidate && options.onicecandidate) {
+                            options.onicecandidate(event.candidate);
+                        }
+                    };
+
+                    // 상태 로그
+                    pc.onconnectionstatechange = () => {
+                        console.log('[PUB] connectionState:', pc.connectionState);
+                    };
+                    pc.oniceconnectionstatechange = () => {
+                        console.log('[PUB] iceConnectionState:', pc.iceConnectionState);
+                    };
+
+                    self.peerConnection = pc;
+
+                    self.generateOffer = function (cb) {
+                        pc.createOffer()
+                            .then(offer => pc.setLocalDescription(offer))
+                            .then(() => cb(null, pc.localDescription.sdp))
+                            .catch(cb);
+                    };
+
+                    self.processAnswer = function (answerSdp, cb) {
+                        pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: answerSdp }))
+                            .then(() => cb && cb(null))
+                            .catch(err => cb && cb(err));
+                    };
+
+                    self.addIceCandidate = function (candidate, cb) {
+                        pc.addIceCandidate(new RTCIceCandidate(candidate))
+                            .then(() => cb && cb(null))
+                            .catch(err => cb && cb(err));
+                    };
+
+                    self.dispose = function () {
+                        pc.close();
+                    };
+
+                    setTimeout(() => callback.call(self, null), 0);
+                },
+
+                WebRtcPeerRecvonly: function (options, callback) {
+                    const self = this;
+                    // const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+                    const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS, iceTransportPolicy: 'relay' });
+
+                    pc.onicecandidate = (event) => {
+                        if (event.candidate && options.onicecandidate) {
+                            options.onicecandidate(event.candidate);
+                        }
+                    };
+
+                    pc.ontrack = (event) => {
+                        if (options.remoteVideo && event.streams[0]) {
+                            options.remoteVideo.srcObject = event.streams[0];
+
+                            // 자동재생 보완
+                            const tryPlay = () => options.remoteVideo.play().catch(()=>{});
+                            if (document.visibilityState === 'visible') tryPlay();
+                            else {
+                                document.addEventListener('visibilitychange', () => {
+                                    if (document.visibilityState === 'visible') tryPlay();
+                                }, { once: true });
+                            }
+
+                            const id = options.remoteVideo.id.replace('video-', '');
+                            const noVideoElement = document.getElementById(`noVideo-${id}`);
+                            if (noVideoElement) noVideoElement.style.display = 'none';
+                        }
+                    };
+
+                    // 수신 전용
+                    pc.addTransceiver('video', { direction: 'recvonly' });
+                    pc.addTransceiver('audio', { direction: 'recvonly' });
+
+                    // 상태 로그
+                    pc.onconnectionstatechange = () => {
+                        console.log('[SUB] connectionState:', pc.connectionState);
+                    };
+                    pc.oniceconnectionstatechange = () => {
+                        console.log('[SUB] iceConnectionState:', pc.iceConnectionState);
+                    };
+
+                    self.peerConnection = pc;
+
+                    self.generateOffer = function (cb) {
+                        pc.createOffer()
+                            .then(offer => pc.setLocalDescription(offer))
+                            .then(() => cb(null, pc.localDescription.sdp))
+                            .catch(cb);
+                    };
+
+                    self.processAnswer = function (answerSdp, cb) {
+                        pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: answerSdp }))
+                            .then(() => cb && cb(null))
+                            .catch(err => cb && cb(err));
+                    };
+
+                    self.addIceCandidate = function (candidate, cb) {
+                        pc.addIceCandidate(new RTCIceCandidate(candidate))
+                            .then(() => cb && cb(null))
+                            .catch(err => cb && cb(err));
+                    };
+
+                    self.dispose = function () {
+                        pc.close();
+                    };
+
+                    setTimeout(() => callback.call(self, null), 0);
+                }
+            }
+        };
+
+        console.log('WebRTC 구현 초기화 완료');
+    }
+    initializeWebRTC();
+
+    /***********************
+     * UI 흐름
+     ***********************/
+    function enterRoom() {
+        const roomInput = document.getElementById('roomInput').value.trim();
+        const usernameInput = document.getElementById('usernameInput').value.trim();
+
+        if (!roomInput) return alert('방 번호를 입력해주세요');
+        if (!usernameInput) return alert('이름을 입력해주세요');
+
+        roomId = roomInput;
+        username = usernameInput;
+        userId = username + '-' + Math.random().toString(36).substr(2, 5);
+
+        document.getElementById('roomEntry').classList.add('hidden');
+        document.getElementById('previewSection').classList.remove('hidden');
+
+        startPreview();
+    }
+
+    function goBack() {
+        if (localStream) {
+            localStream.getTracks().forEach(track => track.stop());
+            localStream = null;
+        }
+        document.getElementById('previewSection').classList.add('hidden');
+        document.getElementById('roomEntry').classList.remove('hidden');
+    }
+
+    async function startPreview() {
+        try {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            const pv = document.getElementById('previewVideo');
+            pv.srcObject = localStream;
+            pv.play().catch(()=>{});
+            console.log('미리보기 시작');
+        } catch (error) {
+            console.error('카메라 접근 실패:', error);
+            document.getElementById('cameraError').classList.remove('hidden');
+            document.getElementById('joinBtn').disabled = false;
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+                console.log('오디오만 활성화됨');
+            } catch (audioError) {
+                console.error('오디오도 접근 실패:', audioError);
+            }
+        }
+    }
+
+    function toggleVideo() {
+        if (localStream) {
+            const videoTrack = localStream.getVideoTracks()[0];
+            if (videoTrack) {
+                isVideoEnabled = !isVideoEnabled;
+                videoTrack.enabled = isVideoEnabled;
+                updateVideoButton('videoToggle');
+            }
+        }
+    }
+
+    function toggleAudio() {
+        if (localStream) {
+            const audioTrack = localStream.getAudioTracks()[0];
+            if (audioTrack) {
+                isAudioEnabled = !isAudioEnabled;
+                audioTrack.enabled = isAudioEnabled;
+                updateAudioButton('audioToggle');
+            }
+        }
+    }
+
+    function updateVideoButton(buttonId) {
+        const btn = document.getElementById(buttonId);
+        if (!btn) return;
+        btn.classList.toggle('off', !isVideoEnabled);
+    }
+
+    function updateAudioButton(buttonId) {
+        const btn = document.getElementById(buttonId);
+        if (!btn) return;
+        btn.classList.toggle('off', !isAudioEnabled);
+    }
+
+    async function joinRoom() {
+        document.getElementById('previewSection').classList.add('hidden');
+        document.getElementById('chatSection').style.display = 'flex';
+        document.getElementById('header').classList.remove('hidden');
+        document.querySelector('.container').classList.add('chat-active');
+
+        document.getElementById('roomDisplay').textContent = roomId;
+        document.getElementById('userDisplay').textContent = username;
+
+        connectSfuWebSocket();
+    }
+
+    /***********************
+     * WebSocket 시그널링
+     ***********************/
+    function connectSfuWebSocket() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        socket = new WebSocket(`${protocol}//${WS_HOST}:${WS_PORT}${WS_PATH}`);
+
+        socket.onopen = () => {
+            console.log('SFU WebSocket 연결됨');
+            updateConnectionStatus('connecting', 'SFU 서버에 연결 중...');
+            sendMessage({ type: 'join-room', roomId, userId });
+        };
+
+        socket.onmessage = async (event) => {
+            const message = JSON.parse(event.data);
+            console.log('SFU 메시지 수신:', message);
+
+            switch (message.id) {
+                case 'existing-participants':
+                    await handleExistingParticipants(message);
+                    break;
+                case 'new-participant-arrived':
+                    await handleNewParticipant(message);
+                    break;
+                case 'participant-left':
+                    handleParticipantLeft(message);
+                    break;
+                case 'receive-video-answer':
+                    await handleReceiveVideoAnswer(message);
+                    break;
+                case 'process-sdp-answer':
+                    await handleProcessSdpAnswer(message);
+                    break;
+                case 'ice-candidate':
+                    await handleIceCandidate(message);
+                    break;
+                case 'error':
+                    console.error('서버 오류:', message.error);
+                    updateConnectionStatus('failed', '오류: ' + message.error);
+                    break;
+            }
+        };
+
+        socket.onerror = (error) => {
+            console.error('SFU WebSocket 오류:', error);
+            updateConnectionStatus('failed', 'SFU 연결 오류');
+        };
+
+        socket.onclose = () => {
+            console.log('SFU WebSocket 연결 종료');
+            updateConnectionStatus('failed', 'SFU 연결이 끊어졌습니다');
+        };
+    }
+
+    async function handleExistingParticipants(message) {
+        console.log('기존 참가자들:', message.participants);
+
+        createLocalVideo();
+        await createWebRtcPeerSendOnly();
+
+        for (const participantId of message.participants) {
+            participants[participantId] = createRemoteVideo(participantId);
+            await receiveVideoFrom(participantId);
+        }
+
+        updateParticipantCount();
+        updateVideoGrid();
+
+        setTimeout(() => updateConnectionStatus('connected', 'SFU 서버에 연결됨'), 500);
+    }
+
+    async function handleNewParticipant(message) {
+        const pid = message.userId;
+        participants[pid] = createRemoteVideo(pid);
+        await receiveVideoFrom(pid);
+
+        updateParticipantCount();
+        updateVideoGrid();
+        updateConnectionStatus('connected', 'SFU 서버에 연결됨');
+    }
+
+    function handleParticipantLeft(message) {
+        const pid = message.userId;
+        const participant = participants[pid];
+        if (participant) {
+            if (participant.webRtcPeer) participant.webRtcPeer.dispose();
+            if (participant.rtcPeer) participant.rtcPeer.dispose(); // 과거 키 호환
+            const container = document.querySelector(`[data-user-id="${pid}"]`);
+            if (container) container.remove();
+        }
+        delete participants[pid];
+
+        updateParticipantCount();
+        updateVideoGrid();
+    }
+
+    /***********************
+     * WebRTC 생성/처리
+     ***********************/
+    async function createWebRtcPeerSendOnly() {
+        console.log('송신 전용 WebRTC Peer 생성 시작');
+
+        if (!localStream) {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            } catch (error) {
+                console.error('로컬 스트림 생성 실패:', error);
+                return;
+            }
+        }
+
+        const options = {
+            localVideo: document.getElementById('localVideo'),
+            videoStream: localStream,
+            audioStream: localStream,
+            mediaConstraints: { audio: true, video: true },
+            onicecandidate: (candidate) => {
+                sendMessage({ type: 'on-ice-candidate', candidate, userId });
+            }
+        };
+
+        webRtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
+            if (error) {
+                console.error('송신 WebRTC Peer 생성 실패:', error);
+                updateConnectionStatus('failed', '연결 실패: ' + error.message);
+                return;
+            }
+
+            const pc = this.peerConnection;
+            pc.onconnectionstatechange = () => {
+                console.log('로컬 연결 상태 변화:', pc.connectionState);
+                if (pc.connectionState === 'failed') updateConnectionStatus('failed', '연결 실패');
+            };
+
+            this.generateOffer((err, sdpOffer) => {
+                if (err) {
+                    console.error('SDP Offer 생성 실패:', err);
+                    updateConnectionStatus('failed', 'SDP Offer 생성 실패');
+                    return;
+                }
+                sendMessage({ type: 'process-sdp-offer', sdpOffer, userId });
+            });
+        });
+    }
+
+    async function receiveVideoFrom(senderId) {
+        console.log('비디오 수신 요청:', senderId);
+
+        const options = {
+            remoteVideo: document.getElementById('video-' + senderId),
+            mediaConstraints: { audio: true, video: true },
+            onicecandidate: (candidate) => {
+                sendMessage({
+                    type: 'on-ice-candidate',
+                    candidate: candidate,
+                    userId: userId,
+                });
+            }
+        };
+
+        const recvPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options, function (error) {
+            if (error) {
+                console.error('수신 Peer 생성 실패:', error);
+                return;
+            }
+
+            const pc = this.peerConnection;
+            pc.onconnectionstatechange = () => {
+                console.log(`[${senderId}] 연결 상태 변화:`, pc.connectionState);
+                if (pc.connectionState === 'failed') updateConnectionStatus('failed', '연결 실패');
+            };
+
+            this.generateOffer((err, sdpOffer) => {
+                if (err) {
+                    console.error('SDP Offer 생성 실패:', err);
+                    return;
+                }
+                sendMessage({ type: 'receive-video-from', sender: senderId, sdpOffer, userId });
+            });
+        });
+
+        // 🔹 참가자 상태 덮어쓰기 금지 — 병합
+        participants[senderId] = Object.assign(
+            participants[senderId] || {},
+            { webRtcPeer: recvPeer, pendingCandidates: [] }
+        );
+    }
+
+    async function handleReceiveVideoAnswer(message) {
+        const senderId = message.sender;
+        const participant = participants[senderId];
+        if (!participant || !participant.webRtcPeer) return console.error('참가자 없음:', senderId);
+
+        try {
+            await participant.webRtcPeer.processAnswer(message.sdpAnswer);
+            participant.sdpNegotiationCompleted = true;
+
+            // 대기 후보 처리
+            if (participant.pendingCandidates?.length) {
+                for (const c of participant.pendingCandidates) {
+                    try { await participant.webRtcPeer.addIceCandidate(c); } catch (e) { console.error(e); }
+                }
+                participant.pendingCandidates = [];
+            }
+            console.log('수신 SDP Answer 처리 완료:', senderId);
+        } catch (e) {
+            console.error('수신 SDP Answer 처리 실패:', e);
+            updateConnectionStatus('failed', '연결 실패: ' + e.message);
+        }
+    }
+
+    async function handleProcessSdpAnswer(message) {
+        if (!webRtcPeer) return console.error('WebRTC 퍼블리시 피어 없음');
+
+        try {
+            await webRtcPeer.processAnswer(message.sdpAnswer);
+            updateConnectionStatus('connected', '연결됨');
+            console.log('퍼블리시 SDP Answer 처리 완료');
+        } catch (e) {
+            console.error('퍼블리시 SDP Answer 처리 실패:', e);
+            updateConnectionStatus('failed', '연결 실패: ' + e.message);
+        }
+    }
+
+    // 🔸 핵심: 퍼블리시 후보도 절대 버리지 말 것
+    async function handleIceCandidate(message) {
+
+          const cand = message.candidate;
+          // 구독 피어용 후보 (특정 sender에 대한 recvonly Peer)
+              if (message.sender && participants[message.sender]) {
+                try { await participants[message.sender].webRtcPeer.addIceCandidate(cand); } catch(e){console.error(e);}
+                return;
+              }
+          // 로컬 퍼블리셔 피어용 후보
+              if (webRtcPeer && (message.kind === 'publisher' || !message.sender)) {
+                try { await webRtcPeer.addIceCandidate(cand); } catch(e){console.error(e);}
+              }
+
+        // const targetId = message.userId || message.sender || message.name;
+        //
+        // const cand = message.candidate;
+        //
+        // // 내 퍼블리시 피어 후보
+        // if (targetId === userId && webRtcPeer) {
+        //     try { await webRtcPeer.addIceCandidate(cand); } catch (e) { console.error(e); }
+        //     return;
+        // }
+        //
+        // // 구독 피어 후보
+        // if (targetId && participants[targetId]) {
+        //     const p = participants[targetId];
+        //     if (p.sdpNegotiationCompleted) {
+        //         try { await p.webRtcPeer.addIceCandidate(cand); } catch (e) { console.error(e); }
+        //     } else {
+        //         (p.pendingCandidates ||= []).push(cand);
+        //     }
+        // }
+    }
+
+
+    /***********************
+     * DOM 유틸
+     ***********************/
+    function createLocalVideo() {
+        const grid = document.getElementById('videoGrid');
+        const container = document.createElement('div');
+        container.className = 'video-container';
+        container.setAttribute('data-user-id', 'local');
+
+        container.innerHTML = `
+        <video class="video-element" autoplay muted playsinline id="localVideo"></video>
+        <div class="video-label">${username} (나)</div>
+        <div class="no-video hidden" id="localNoVideo">
+          <div class="no-video-icon"></div>
+          <div class="no-video-text">비디오 꺼짐</div>
+        </div>
+      `;
+        grid.appendChild(container);
+
+        if (localStream) {
+            const lv = document.getElementById('localVideo');
+            lv.srcObject = localStream;
+            lv.play().catch(()=>{});
+        }
+        updateLocalVideoStatus();
+    }
+
+    function createRemoteVideo(participantId) {
+        const grid = document.getElementById('videoGrid');
+        const container = document.createElement('div');
+        container.className = 'video-container';
+        container.setAttribute('data-user-id', participantId);
+
+        const video = document.createElement('video');
+        video.className = 'video-element';
+        video.autoplay = true;
+        video.playsInline = true;
+        video.id = `video-${participantId}`;
+
+        const label = document.createElement('div');
+        label.className = 'video-label';
+        label.textContent = participantId.split('-')[0];
+
+        const noVideo = document.createElement('div');
+        noVideo.className = 'no-video';
+        noVideo.id = `noVideo-${participantId}`;
+        noVideo.innerHTML = `
+        <div class="no-video-icon"></div>
+        <div class="no-video-text">연결 중...</div>
+      `;
+
+        container.appendChild(video);
+        container.appendChild(label);
+        container.appendChild(noVideo);
+        grid.appendChild(container);
+
+        return { video, webRtcPeer: null, pendingCandidates: [], sdpNegotiationCompleted: false };
+    }
+
+    function toggleChatVideo() {
+        toggleVideo();
+        updateVideoButton('chatVideoToggle');
+        updateLocalVideoStatus();
+        if (socket?.readyState === WebSocket.OPEN) {
+            sendMessage({ type: 'video-status', enabled: isVideoEnabled });
+        }
+    }
+
+    function toggleChatAudio() {
+        toggleAudio();
+        updateAudioButton('chatAudioToggle');
+        if (socket?.readyState === WebSocket.OPEN) {
+            sendMessage({ type: 'audio-status', enabled: isAudioEnabled });
+        }
+    }
+
+    function updateLocalVideoStatus() {
+        const noVideo = document.getElementById('localNoVideo');
+        if (!noVideo) return;
+        noVideo.classList.toggle('hidden', !!isVideoEnabled);
+    }
+
+    function updateParticipantCount() {
+        const count = Object.keys(participants).length + 1;
+        document.getElementById('participantCount').textContent = count + '명';
+    }
+
+    function updateVideoGrid() {
+        const grid = document.getElementById('videoGrid');
+        const count = Object.keys(participants).length + 1;
+        grid.className = 'video-grid';
+        grid.classList.add(`participants-${Math.min(count, 6)}`);
+    }
+
+    function updateConnectionStatus(status, message) {
+        const statusEl = document.getElementById('connectionStatus');
+        statusEl.innerHTML = '';
+        const span = document.createElement('span');
+        span.className = `status-${status}`;
+        span.textContent = message;
+        statusEl.appendChild(span);
+    }
+
+    function sendMessage(message) {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify(message));
+        } else {
+            console.error('WebSocket이 연결되지 않았습니다');
+        }
+    }
+
+    function exitRoom() {
+        console.log('방 나가기');
+
+        if (socket?.readyState === WebSocket.OPEN) {
+            sendMessage({ type: 'leave-room' });
+        }
+
+        if (localStream) {
+            localStream.getTracks().forEach(t => t.stop());
+            localStream = null;
+        }
+
+        if (webRtcPeer) {
+            webRtcPeer.dispose();
+            webRtcPeer = null;
+        }
+
+        Object.values(participants).forEach(p => {
+            if (p.webRtcPeer) p.webRtcPeer.dispose();
+            if (p.rtcPeer) p.rtcPeer.dispose();
+        });
+        participants = {};
+
+        if (socket) {
+            socket.close();
+            socket = null;
+        }
+
+        location.reload();
+    }
+
+    window.addEventListener('beforeunload', () => {
+        if (socket?.readyState === WebSocket.OPEN) {
+            sendMessage({ type: 'leave-room' });
+            socket.close();
+        }
+        if (localStream) localStream.getTracks().forEach(t => t.stop());
+    });
+
+    // Enter 키로 방 입장
+    document.getElementById('roomInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const usernameInput = document.getElementById('usernameInput');
+            if (usernameInput.value.trim()) enterRoom();
+            else usernameInput.focus();
+        }
+    });
+    document.getElementById('usernameInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') enterRoom();
+    });
+
+    // 디버깅
+    window.debugWebRTC = function () {
+        console.log('=== WebRTC Debug Info ===');
+        console.log('kurentoUtils:', typeof kurentoUtils);
+        console.log('localStream:', localStream);
+        console.log('webRtcPeer(pub):', webRtcPeer);
+        console.log('participants:', participants);
+        console.log('socket:', socket ? socket.readyState : 'null');
+        console.log('========================');
+    };
+</script>
+</body>
+</html>
