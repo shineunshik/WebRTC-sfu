@@ -81,14 +81,14 @@
     /***********************
      * 환경 상수 (필수 수정)
      ***********************/
-    const WS_HOST = '192.168.219.111'; // ← SFU 백엔드 호스트/IP
+    const WS_HOST = '172.31.98.199'; // ← SFU 백엔드 호스트/IP
     const WS_PORT = 8082;              // ← SFU 백엔드 WebSocket 포트
     const WS_PATH = '/sfu';
 
     // TURN 쓰면 아래 주석 해제하고 정보 입력 (브라우저 ICE)
     const ICE_SERVERS = [
       //  { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'turn:192.168.219.111:3478', username: 'turnuser', credential: 'turnpass' },
+        { urls: 'turn:172.31.98.199:3478', username: 'turnuser', credential: 'turnpass' },
         // { urls: 'turn:YOUR_TURN_HOST:3478', username: 'turnuser', credential: 'turnpass' }
     ];
 

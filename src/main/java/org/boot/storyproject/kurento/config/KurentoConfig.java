@@ -9,7 +9,7 @@ public class KurentoConfig {
 
   @Bean
   public KurentoClient kurentoClient() {
-    return KurentoClient.create("ws://192.168.219.111:8888/kurento");
+    return KurentoClient.create("ws://172.31.98.199:8888/kurento");
   }
 
 }

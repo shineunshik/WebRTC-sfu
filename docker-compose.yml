@@ -39,8 +39,8 @@ services:
     image: kurento/kurento-media-server:7.2.0
     container_name: kms
     environment:
-      - KMS_MIN_PORT=50000
-      - KMS_MAX_PORT=50500
+      - KMS_MIN_PORT=50060
+      - KMS_MAX_PORT=50450
       - KMS_EXTERNAL_IPV4=${PUBLIC_IP}
       - KMS_STUN_SERVER=stun.l.google.com
       - KMS_STUN_PORT=19302
@@ -50,5 +50,5 @@ services:
       - turn
     ports:
       - "8888:8888/tcp"            # KMS 제어용 WebSocket
-      - "50000-50500:50000-50500/udp"  # WebRTC 미디어 포트
+      - "50060-50450:50060-50450/udp" # WebRTC 미디어 포트
     restart: unless-stopped
